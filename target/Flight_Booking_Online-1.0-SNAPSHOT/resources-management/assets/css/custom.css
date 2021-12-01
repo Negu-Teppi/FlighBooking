@@ -1,0 +1,100 @@
+.error-label {
+    color: red;
+}
+.image-area {
+    position: relative;
+    width: calc(100%/5);
+    background: #333;
+}
+.image-area img{
+    max-width: 100%;
+    height: auto;
+}
+.remove-image {
+    display: none;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    border-radius: 10em;
+    padding: 2px 6px 3px;
+    text-decoration: none;
+    font: 700 21px/20px sans-serif;
+    background: #555;
+    border: 3px solid #fff;
+    color: #FFF;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    -webkit-transition: background 0.5s;
+    transition: background 0.5s;
+}
+.remove-image:hover {
+    background: #E54E4E;
+    padding: 3px 7px 5px;
+    top: -11px;
+    right: -11px;
+}
+.remove-image:active {
+    background: blue;
+    top: -10px;
+    right: -11px;
+}
+
+.text-left{
+    text-align: left;
+    margin-left: 25px;
+    padding-left: 25%;
+    border-top: none;
+}
+.div-float-left{
+    float: left;
+    font-weight: normal;
+    font-size: medium;
+    font-style: normal;
+    font-variant: normal;
+    text-indent: initial;
+    white-space: normal;
+}
+
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.form-inline label {
+    margin: 5px 10px 5px 0;
+}
+
+.form-inline input {
+    vertical-align: middle;
+    background-color: #fff;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-inline button {
+    margin-left: 10px;
+    background-color: dodgerblue;
+    border: none;
+    border-radius:55% ;
+    color: white;
+    cursor: pointer;
+}
+
+.form-inline button:hover {
+    background-color: royalblue;
+}
+
+@media (max-width: 800px) {
+    .form-inline input {
+        margin: 10px 0;
+    }
+
+    .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+.hiddenContent {
+    display: inline !important;
+}
