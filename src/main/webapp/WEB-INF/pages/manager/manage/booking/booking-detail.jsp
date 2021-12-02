@@ -109,11 +109,7 @@
                                             <p>Operations</p>
                                             <p>Aircraft Number</p>
                                             <p>Seat</p>
-                                            <p>
-                                                <c:if test="${booking.bookingStatus.status=='BOOKED'}">
-                                                    Service
-                                                </c:if>
-                                            </p>
+                                            <p>Service</p>
                                         </div>
                                         <div class="col-md-6 div-float-left" >
                                             <p>${detail.passenger.fullName}</p>
