@@ -5,6 +5,7 @@ import com.manhlee.flight_booking_online.service.BookingService;
 import com.manhlee.flight_booking_online.view.ExcelReportView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,11 +26,11 @@ public class ExcelController {
     private BookingService bookingService;
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView getExcel(@RequestParam("start") String strStartDate,
-            @RequestParam("end") String strEndDate) throws ParseException {
+    @RequestMapping("/export")
+    public ModelAndView getExcel(@RequestParam("startDate") String strStartDate,
+            @RequestParam("endDate") String strEndDate) throws ParseException {
 
-        List<BookingEntity> bookings= new ArrayList<>();
+        List<BookingEntity> bookings;
         if (!strEndDate.equals("") && !strStartDate.equals("")) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = formatter.parse(strStartDate);

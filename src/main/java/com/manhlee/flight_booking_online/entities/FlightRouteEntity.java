@@ -23,11 +23,11 @@ public class FlightRouteEntity {
     private double price;
     private int distance;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "departure_id")
     private AirportEntity departure;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "destination_id")
     private AirportEntity destination;
 

@@ -6,46 +6,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Home</title>
     <jsp:include page="/WEB-INF/pages/include/management/css-page.jsp"/>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
     <style>
-        body {
-            padding: 20px;
-        }
-        .image-area {
-            position: relative;
-            width: 30%;
-            background: #333;
-        }
-        .image-area img{
-            max-width: 100%;
-            height: auto;
-        }
-        .remove-image {
-            display: none;
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            border-radius: 10em;
-            padding: 2px 6px 3px;
-            text-decoration: none;
-            font: 700 21px/20px sans-serif;
-            background: #555;
-            border: 3px solid #fff;
-            color: #FFF;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-            -webkit-transition: background 0.5s;
-            transition: background 0.5s;
-        }
-        .remove-image:hover {
-            background: #E54E4E;
-            padding: 3px 7px 5px;
-            top: -11px;
-            right: -11px;
-        }
-        .remove-image:active {
-            background: #E54E4E;
-            top: -10px;
-            right: -11px;
+        .my-error-class {
+            color:#FF0000;  /* red */
         }
     </style>
 </head>
@@ -66,7 +31,7 @@
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
                             <c:if test="${action == 'add'}">
-                                <div class="page-title">Update Promotion</div>
+                                <div class="page-title">Add Promotion</div>
                             </c:if>
                             <c:if test="${action == 'update'}">
                                 <div class="page-title">Edit Promotion</div>
@@ -110,7 +75,7 @@
                                 </ul>
                             </div>
                             <mvc:form action="${pageContext.request.contextPath}/manager/promotion/result"
-                                      modelAttribute="promotion" method="post" enctype="multipart/form-data">
+                                      modelAttribute="promotion" id="promotion" method="post" enctype="multipart/form-data">
                                 <div class="card-body row">
                                     <input name="action" type="text" value="${action}" hidden/>
                                     <c:if test="${action == 'update'}">
@@ -130,14 +95,16 @@
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="date" value="${promotion.startDate}" name="startDate">
+                                            <input class="mdl-textfield__input" type="date" value="${promotion.startDate}" name="startDate"
+                                            id="startDate">
                                             <label class="mdl-textfield__label">Start Date</label>
                                             <span class="mdl-textfield__error">Number or text required!</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="date" value="${promotion.endDate}" name="endDate">
+                                            <input class="mdl-textfield__input" type="date" value="${promotion.endDate}" name="endDate"
+                                            id="endDate">
                                             <label class="mdl-textfield__label">End Date</label>
                                             <span class="mdl-textfield__error">Text required!</span>
                                         </div>
@@ -189,5 +156,71 @@
     <!-- end footer -->
 </div>
 <jsp:include page="/WEB-INF/pages/include/management/js-page.jsp" />
+<script>
+    $(document).ready(function(){
+        $.validator.addMethod("duration", function (value, element){
+            return /^([01]?[0-9]|2[0-3])(:[0-5][0-9]){2}$/.test(value);
+        }, "Invalid time format.");
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return arg !== value;
+        }, "Value must not equal arg.");
+        $.validator.addMethod('minStrict', function (value, el, param) {
+            return value > param;
+        });
+        $.validator.addMethod('maxStrict', function (value, el, param) {
+            return value <= param;
+        });
+        $("#promotion").validate({
+            errorClass: "my-error-class",
+            rules: {
+                name: {
+                    required: true
+                },
+                description: {
+                    required: true,
+                    maxlength: 100
+                },
+                startDate: {
+                    required: true,
+                    date: true
+                },
+                endDate: {
+                    required: true,
+                    date: true
+                },
+                discount: {
+                    required: true,
+                    maxlength: 2,
+                    digits: true,
+                    minStrict: 0,
+                    maxStrict: 50
+                }
+            },
+            messages: {
+                name: "Please enter promotion name.",
+                discount: {
+                    required: "Please enter price.",
+                    minStrict: "Discount must greater than 0",
+                    maxStrict: "Discount must less than 50"
+                },
+                description: {
+                    required: "Please enter description.",
+                    maxlength: "Can only enter up to 100 characters!"
+                },
+                startDate: {
+                    required: "Please select start date.",
+                    date: "Field must type date."
+                },
+                endDate: {
+                    required: "Please select end date.",
+                    date: "Field must type date."
+                },
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+</script>
 </body>
 </html>

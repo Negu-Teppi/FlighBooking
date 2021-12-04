@@ -1,8 +1,11 @@
 package com.manhlee.flight_booking_online.service;
 
+import com.manhlee.flight_booking_online.entities.AircraftEntity;
 import com.manhlee.flight_booking_online.entities.PromotionEntity;
 import com.manhlee.flight_booking_online.repository.PromotionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,5 +31,9 @@ public class PromotionService {
 
     public void save(PromotionEntity promotionEntity){
         promotionRepository.save(promotionEntity);
+    }
+
+    public Page<PromotionEntity> getPromotionPages(Pageable pageable){
+        return promotionRepository.findAll(pageable);
     }
 }

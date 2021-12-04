@@ -10,15 +10,17 @@ public class ServiceBookingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "service_id")
     private ServiceEntity service;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "bookingDetail_id")
     private BookingDetailEntity bookingDetail;
 
     private int quantity;
+
+    private double price;
 
     public ServiceBookingEntity() {
     }
@@ -53,5 +55,13 @@ public class ServiceBookingEntity {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="mvc"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -89,7 +90,9 @@
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="number" value="${flightRoute.price}" name="price">
+                                            <fmt:formatNumber type = "number"
+                                                              maxFractionDigits = "0" value = "${flightRoute.price}" var="price" />
+                                            <input class="mdl-textfield__input" type="number" value="${price}" name="price" id="price">
                                             <label class="mdl-textfield__label">Price</label>
                                         </div>
                                     </div>
@@ -102,7 +105,7 @@
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
                                             <select name="departure.id" class="mdl-textfield__input" id="departure">
-                                                <option value="">Select Departure</option>
+                                                <option value="default">Select Departure</option>
                                                 <c:forEach items="${airports}" var="airport">
                                                     <c:if test="${airport.city.cityName == flightRoute.departure.city.cityName}">
                                                         <option value="${airport.id}" selected>${airport.city.cityName}</option>
@@ -164,6 +167,12 @@
         $.validator.addMethod("duration", function (value, element){
             return /^([01]?[0-9]|2[0-3])(:[0-5][0-9]){2}$/.test(value);
         }, "Invalid time format.");
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return arg !== value;
+        }, "Value must not equal arg.");
+        $.validator.addMethod('minStrict', function (value, el, param) {
+            return value > param;
+        });
         $("#flight-route").validate({
             errorClass: "my-error-class",
             rules: {
@@ -173,14 +182,17 @@
                 },
                 distance: {
                     required: true,
-                    digits: true
+                    digits: true,
+                    minStrict: 0
                 },
                 price: {
                     required: true,
-                    number: true
+                    number: true,
+                    minStrict: 0
                 },
                 departure: {
-                    required: true
+                    required: true,
+                    valueNotEquals: "default"
                 }
             },
             messages: {
@@ -190,13 +202,16 @@
                 },
                 distance: {
                     required: "Please enter duration.",
-                    digits: "Distance must be digit."
+                    digits: "Distance must be digit.",
+                    minStrict: "Field must greater than 0"
                 },
                 price: {
-                    required: "Please enter price of flight route."
+                    required: "Please enter price of flight route.",
+                    minStrict: "Field must greater than 0"
                 },
                 departure: {
-                    required: "Please select field."
+                    required: "Please select field.",
+                    valueNotEquals: "Please select an item!"
                 }
             },
             submitHandler: function(form) {

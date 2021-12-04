@@ -6,6 +6,8 @@ import com.manhlee.flight_booking_online.enums.SeatStatus;
 import com.manhlee.flight_booking_online.enums.SeatType;
 import com.manhlee.flight_booking_online.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/manager")
@@ -66,12 +69,15 @@ public class ManagerController {
             username = ((UserDetails) principal).getUsername();
         }
         model.addAttribute("message", "Hello Manager: " + username);
-        return "manager/home";
+        return "redirect:/manager/view/aircraft";
     }
 
     @RequestMapping("/view/aircraft")
-    public String viewAircraft(Model model) {
-        model.addAttribute("aircrafts", aircraftService.getAircrafts());
+    public String viewAircraft(Model model,
+                               @RequestParam("page") Optional<Integer> p) {
+        Pageable pageable = PageRequest.of(p.orElse(0), 5);
+        model.addAttribute("aircrafts", aircraftService.getAircraftPages(pageable));
+//        model.addAttribute("aircrafts", aircraftService.getAircrafts());
         return "manager/setup/aircraft/view-aircraft";
     }
 
@@ -112,8 +118,6 @@ public class ManagerController {
                 image.setName(name);
                 image.setAircraft(aircraft);
                 images.add(image);
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -135,8 +139,11 @@ public class ManagerController {
     }
 
     @RequestMapping("/view/airport")
-    public String viewAirport(Model model) {
-        model.addAttribute("airports", airportService.getAirports());
+    public String viewAirport(Model model,
+                              @RequestParam("page") Optional<Integer> p) {
+        Pageable pageable = PageRequest.of(p.orElse(0), 5);
+        model.addAttribute("airports", airportService.getAircraftPages(pageable));
+//        model.addAttribute("airports", airportService.getAirports());
         return "manager/setup/airport/view-airport";
     }
 
@@ -193,14 +200,18 @@ public class ManagerController {
         model.addAttribute("airport", airportService.getAirport(id));
         model.addAttribute("cities", cityService.getCities());
         model.addAttribute("images", imageService.getImagesAirport(id));
+        model.addAttribute("status", CommonStatus.values());
         model.addAttribute("action", "update");
         return "manager/setup/airport/edit-airport";
     }
 
 
     @RequestMapping("/flight-route/view")
-    public String viewFlightRoute(Model model) {
-        model.addAttribute("flightRoutes", flightRouteService.getFlightRoutes());
+    public String viewFlightRoute(Model model,
+                                  @RequestParam("page") Optional<Integer> p) {
+        Pageable pageable = PageRequest.of(p.orElse(0), 5);
+        model.addAttribute("flightRoutes", flightRouteService.getFlightRoutePages(pageable));
+//        model.addAttribute("flightRoutes", flightRouteService.getFlightRoutes());
         return "manager/setup/flight-route/view-flightRoute";
     }
 
@@ -265,7 +276,18 @@ public class ManagerController {
         model.addAttribute("aircrafts", aircraftService.getAircrafts());
         model.addAttribute("flights", flightService.getFlights());
         model.addAttribute("action", "update");
-        return "manager/setup/aircraft/edit-aircraft-seat";
+        return "redirect:/manager/view/aircraft";
     }
 
+    @RequestMapping("/airport/image/delete/{airportId}/{id}")
+    public String deleteImage(Model model, @PathVariable("id") int id,
+                              @PathVariable("airportId") int airportId) {
+        imageService.delete(id);
+        model.addAttribute("airport", airportService.getAirport(id));
+        model.addAttribute("images", imageService.getImagesAirport(airportId));
+        model.addAttribute("cities", cityService.getCities());
+        model.addAttribute("status", CommonStatus.values());
+        model.addAttribute("action", "update");
+        return "redirect:/manager/view/airport";
+    }
 }

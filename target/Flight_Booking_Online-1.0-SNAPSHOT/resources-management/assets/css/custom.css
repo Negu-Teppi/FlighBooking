@@ -98,3 +98,17 @@
 .hiddenContent {
     display: inline !important;
 }
+.img-edit{
+    width: 100px;
+    height: auto;
+    margin: 5px
+}
+.m-l-40{
+    margin-left: 40px;
+}
+
+.img-w-100-h-75{
+    width: 120px;
+    height: 85px;
+    margin: 5px;
+}

@@ -18,7 +18,7 @@ public class ServiceEntity {
     private String description;
     private double price;
 
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "service", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ImageEntity> images;
 
     @OneToMany(mappedBy = "service")

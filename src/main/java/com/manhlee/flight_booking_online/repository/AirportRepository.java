@@ -1,6 +1,9 @@
 package com.manhlee.flight_booking_online.repository;
 
+import com.manhlee.flight_booking_online.entities.AircraftEntity;
 import com.manhlee.flight_booking_online.entities.AirportEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -25,4 +28,6 @@ public interface AirportRepository extends CrudRepository<AirportEntity, Integer
             "where F.departure_id=?1 \n" +
             "group by A.airport_name)")
     List<AirportEntity> getDestinationByDepartureId(int id);
+
+    Page<AirportEntity> findAll(Pageable pageable);
 }

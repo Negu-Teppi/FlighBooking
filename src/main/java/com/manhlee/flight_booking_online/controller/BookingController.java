@@ -9,10 +9,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -52,9 +55,13 @@ public class BookingController {
     }
 
     @RequestMapping("/bookingDetail/view/{id}")
-    public String viewBookingDetails(Model model, @PathVariable("id") int id) {
+    public String viewBookingDetails(Model model, @PathVariable("id") int id,
+                                        HttpSession session) {
+        session.setAttribute("serviceBooking", new HashMap<Integer, ServiceBookingEntity>());
+        List<BookingDetailEntity> bookingDetails = bookingDetailService.getBookingDetailsByBooking(id);
         model.addAttribute("booking", bookingService.getBooking(id));
-        model.addAttribute("bookingDetails", bookingDetailService.getBookingDetailsByBooking(id));
+        model.addAttribute("bookingDetails", bookingDetails);
+        model.addAttribute("direction", bookingDetailService.getDirection(bookingDetails));
         model.addAttribute("bookingStatus", bookingStatusService.getBookingStatus());
         model.addAttribute("services", service.getServices());
         return "manager/manage/booking/booking-detail";
@@ -71,8 +78,8 @@ public class BookingController {
                                Model model) {
 
         BookingEntity booking = bookingService.getBookingPaymentLazy(id);
-        BookingStatusEntity bookingStatus = bookingStatusService.getStatus(status);
-
+        BookingStatusEntity statusB= bookingStatusService.getStatusEquals(status);
+        List<BookingDetailEntity> bookingDetails = bookingDetailService.getBookingDetailsByBooking(id);
         if (status.equals("CANCEL")) {
             try {
                 List<PaymentEntity> payments = booking.getPayments();
@@ -88,7 +95,7 @@ public class BookingController {
                 String from = "lehongmanh71@gmail.com";
                 String to = booking.getEmail();
                 String subject = "Booking info";
-                String content = "Cancel booking number " + booking.getBookingNumber();
+                String content = "Cancel booking number " + booking.getBookingNumber() + " Date: " + new Date();
                 sendEmail(from, to, subject, content);
 
                 paymentService.save(payment1);
@@ -98,33 +105,42 @@ public class BookingController {
                 creditCard.setBalance(newBalance);
                 cardService.save(creditCard);
 
-                booking.setBookingStatus(bookingStatus);
+                booking.setBookingStatus(statusB);
                 bookingService.save(booking);
+
 
                 model.addAttribute("booking", bookingService.getBooking(id));
                 model.addAttribute("bookingDetails", bookingDetailService.getBookingDetailsByBooking(id));
-                model.addAttribute("bookingStatus", bookingStatus);
+                model.addAttribute("bookingStatus",bookingStatusService.getStatus(status));
+                model.addAttribute("direction", bookingDetailService.getDirection(bookingDetails));
+                model.addAttribute("services", service.getServices());
                 return "/manager/manage/booking/booking-detail";
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }else if(status.equals("CHECK_IN") || status.equals("COMPLETED")){
             List<BookingStatusEntity> listStatus =  bookingStatusService.getBookingStatusNotEquals("CANCEL");
-            booking.setBookingStatus(bookingStatus);
+            booking.setBookingStatus(statusB);
             bookingService.save(booking);
 
             model.addAttribute("booking", bookingService.getBooking(id));
-            model.addAttribute("bookingDetails", bookingDetailService.getBookingDetailsByBooking(id));
+            model.addAttribute("bookingDetails", bookingDetails);
+            model.addAttribute("bookingStatus", bookingStatusService.getBookingStatus());
+            model.addAttribute("direction", bookingDetailService.getDirection(bookingDetails));
+            model.addAttribute("services", service.getServices());
             model.addAttribute("bookingStatus", listStatus);
             return "/manager/manage/booking/booking-detail";
         }else {
 
             List<BookingStatusEntity> listStatus =  bookingStatusService.getBookingStatus();
-            booking.setBookingStatus(bookingStatus);
+            booking.setBookingStatus(statusB);
             bookingService.save(booking);
 
             model.addAttribute("booking", bookingService.getBooking(id));
-            model.addAttribute("bookingDetails", bookingDetailService.getBookingDetailsByBooking(id));
+            model.addAttribute("bookingDetails", bookingDetails);
+            model.addAttribute("bookingStatus", bookingStatusService.getBookingStatus());
+            model.addAttribute("direction", bookingDetailService.getDirection(bookingDetails));
+            model.addAttribute("services", service.getServices());
             model.addAttribute("bookingStatus", listStatus);
             return "/manager/manage/booking/booking-detail";
         }
@@ -147,8 +163,25 @@ public class BookingController {
         Date endDate = formatter.parse(strEndDate);
         model.addAttribute("bookings", bookingService.searchByBookingDate(startDate, endDate));
         model.addAttribute("bookings", setTotal(bookingService.searchByBookingDate(startDate, endDate)));
+        model.addAttribute("start", startDate);
+        model.addAttribute("end",endDate);
         return "manager/manage/booking/view-booking";
     }
+
+//    @RequestMapping("/serviceBooking/delete/{bookingId}/{id}")
+//    public String deleteServiceBooking(Model model, @PathVariable("id") int id,
+//                                       @PathVariable("bookingId") int bookingId){
+//        serviceBooking.delete(id);
+//        List<BookingDetailEntity> bookingDetails = bookingDetailService.getBookingDetailsByBooking(id);
+//        model.addAttribute("booking", bookingService.getBooking(bookingId));
+//        model.addAttribute("bookingDetails", bookingDetails);
+//        model.addAttribute("bookingStatus", bookingStatusService.getBookingStatus());
+//        model.addAttribute("direction", bookingDetailService.getDirection(bookingDetails));
+//        model.addAttribute("services", service.getServices());
+//
+//
+//        return "/manager/manage/booking/booking-detail";
+//    }
 
     public List<BookingEntity> setTotal(List<BookingEntity> bookings) {
 

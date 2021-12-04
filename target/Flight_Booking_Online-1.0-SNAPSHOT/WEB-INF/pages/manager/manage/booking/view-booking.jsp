@@ -287,11 +287,13 @@
                                 <div class="row p-b-20">
                                     <div class="col-md-6 col-sm-6 col-6">
                                         <div class="btn-group">
+                                            <fmt:formatDate value="${start}" pattern="yyyy-MM-dd" var="startD"/>
+                                            <fmt:formatDate value="${end}" pattern="yyyy-MM-dd" var="endD"/>
                                             <form class="form-inline" action="${pageContext.request.contextPath}/manager/booking/search/date" method="GET">
                                                 <label for="startDate">From:</label>
-                                                <input type="date" id="startDate" placeholder="Enter email" name="startDate">
+                                                <input type="date" id="startDate" placeholder="Enter email" value="${startD}" name="startDate">
                                                 <label for="endDate">To:</label>
-                                                <input type="date" id="endDate" placeholder="Enter password" name="endDate">
+                                                <input type="date" id="endDate" placeholder="Enter password" value="${endD}" name="endDate">
                                                 <button type="submit">Search</button>
                                             </form>
                                         </div>
@@ -311,7 +313,7 @@
                                                         <i class="fa fa-file-pdf-o"></i> Save as PDF </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#>"id="report">
+                                                    <a href="#" onclick="exportExcel()">
                                                         <i class="fa fa-file-excel-o"></i> Export to Excel </a>
                                                 </li>
                                             </ul>
@@ -340,7 +342,7 @@
                                                 <td class="center">${booking.bookingStatus.status}</td>
                                                 <td class="center">
                                                     <fmt:formatNumber type = "number"
-                                                                      maxFractionDigits = "0" value = "${booking.totalPrice}" />
+                                                                      maxFractionDigits = "0" value = "${booking.totalPrice}" /> VND
                                                 </td>
                                                 <td class="center">
                                                     <a href="<c:url
@@ -374,8 +376,7 @@
 <script>
     $(document).ready(function (){
         $("#report").on('click', function () {
-            let start = $('#startDate').val();
-            let end = $('#endDate').val();
+
             console.log(start,end);
 
             $.ajax({
@@ -388,6 +389,11 @@
             });
         });
     });
+    function exportExcel(){
+        let start = $('#startDate').val();
+        let end = $('#endDate').val();
+        location.href="${pageContext.request.contextPath}/report/export?startDate="+start+"&endDate="+end;
+    }
 </script>
 </body>
 </html>

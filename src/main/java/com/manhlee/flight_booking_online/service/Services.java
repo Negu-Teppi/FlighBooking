@@ -1,8 +1,11 @@
 package com.manhlee.flight_booking_online.service;
 
+import com.manhlee.flight_booking_online.entities.AirportEntity;
 import com.manhlee.flight_booking_online.entities.ServiceEntity;
 import com.manhlee.flight_booking_online.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,5 +31,8 @@ public class Services {
             return optional.get();
         }
         return null;
+    }
+    public Page<ServiceEntity> getServicePages(Pageable pageable){
+        return serviceRepository.findAll(pageable);
     }
 }

@@ -126,13 +126,25 @@
                                         <br/>
                                         <input type="file" name="files" id="image" multiple="multiple"/>
                                         <br/>
-                                        <span id="image-edit">
-                                            <c:forEach items="${airport.images}" var="image">
-                                                <img style="width: 100px; height: auto; margin-top: 10px" data-name="${image.name}"
-                                                     src="<c:url value="/resources-management/image/airport/"/>${image.name}">
-                                                <button class="delete" type="button" data-btnname="${image.name}">x</button>
-                                            </c:forEach>
-                                        </span>
+                                        <table>
+                                            <input type="hidden" value="${airport.id}"/>
+                                            <tr>
+                                                <c:forEach items="${airport.images}" var="image">
+                                                    <td>
+                                                        <p>
+                                                            <img class="img-edit"
+                                                                 src="<c:url value="/resources-management/image/airport/"/>${image.name}">
+                                                            <br/>
+                                                            <a onclick="location.href='<c:url
+                                                                    value="/manager/airport/image/delete/${airport.id}/${image.id}"/>'"
+                                                                    class="btn btn-tbl-delete btn-xs m-l-40">
+                                                                <i class="fa fa-trash-o "></i>
+                                                            </a>
+                                                        </p>
+                                                    </td>
+                                                </c:forEach>
+                                            </tr>
+                                        </table>
                                     </div>
                                     <div class="col-lg-12 p-t-20 text-center">
                                         <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect m-b-10 m-r-20 btn-pink">Submit</button>
@@ -157,45 +169,25 @@
 </div>
 <jsp:include page="/WEB-INF/pages/include/management/js-page.jsp" />
 <script>
-    // $(document).ready(function(){
-    //     $("#airport").validate({
-    //         errorClass: "my-error-class",
-    //         rules: {
-    //             airportName: {
-    //                 required: true
-    //             }
-    //         },
-    //         messages: {
-    //             airportName: "Please enter airport name"
-    //         },
-    //         submitHandler: function(form) {
-    //             form.submit();
-    //         }
-    //     });
-    // });
-
-    let imageNode = document.getElementById("image-edit");
-    let images=[];
-    for (let x of imageNode.children) {
-        if(!x.dataset.name){
-            continue;
-        }
-        images.push(x.dataset.name);
-    };
-    let btnNode = document.getElementsByClassName("delete");
-    for (let btn of btnNode) {
-        btn.onclick=function(){
-            // images= images.filter(image=>image!==btn.dataset.btnname);
-            let img='';
-            for (let image of images) {
-                console.log({image, images});
-                img+=`<img style="width: 100px; height: auto; margin-top: 10px" data-name=${image} src="/Flight_Booking_Online_war_exploded/resources-management/image/airport/${image}"> <button class="delete" type="button" data-btnname="${image}">x</button>`
-
+    $(document).ready(function(){
+        $.validator.addMethod("minletter", function (value, element) {
+            return this.optional(element) || /^[A-Za-z]$/i.test(value);
+        }, "Please enter column.");
+        $("#airport").validate({
+            errorClass: "my-error-class",
+            rules: {
+                airportName: {
+                    required: true
+                }
+            },
+            messages: {
+                airportName: "Please enter airport name"
+            },
+            submitHandler: function(form) {
+                form.submit();
             }
-            console.log({img});
-            // imageNode.innerHTML=img;
-        };
-    };
+        });
+    });
 </script>
 </body>
 </html>

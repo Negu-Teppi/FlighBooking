@@ -56,27 +56,6 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-6 col-6">
-                                        <div class="btn-group pull-right">
-                                            <a class="btn deepPink-bgcolor  btn-outline dropdown-toggle" data-toggle="dropdown">Tools
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li>
-                                                    <a href="javascript:;">
-                                                        <i class="fa fa-print"></i> Print </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;">
-                                                        <i class="fa fa-file-pdf-o"></i> Save as PDF </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;">
-                                                        <i class="fa fa-file-excel-o"></i> Export to Excel </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="table-scrollable">
                                     <table class="table table-hover table-checkable order-column full-width" id="example4">
@@ -91,7 +70,7 @@
                                             <th class="center"> Action </th>
                                         </tr>
                                         </thead>
-                                        <c:forEach items="${flightRoutes}" var="f">
+                                        <c:forEach items="${flightRoutes.content}" var="f">
                                             <c:set var="price" value="${f.price}"/>
                                             <tbody>
                                             <tr class="odd gradeX">
@@ -103,7 +82,7 @@
                                                 </td>
                                                 <td class="center">
                                                     <fmt:formatNumber type = "number"
-                                                                                     maxFractionDigits = "0" value = "${price}" />
+                                                                                     maxFractionDigits = "0" value = "${price}" /> VND
                                                 </td>
                                                 <td class="center">${f.status}</td>
                                                 <td class="center">
@@ -120,6 +99,16 @@
                                             </tbody>
                                         </c:forEach>
                                     </table>
+                                </div>
+                                <div class="row p-b-20">
+                                    <nav aria-label="Page navigation example" style="text-align: center">
+                                        <ul class="pagination">
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/flight-route/view?page=0">First</a></li>
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/flight-route/view?page=${flightRoutes.number - 1}">Previous</a></li>
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/flight-route/view?page=${flightRoutes.number + 1}">Next</a></li>
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/flight-route/view?page=${flightRoutes.totalPages - 1}">Last</a></li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>

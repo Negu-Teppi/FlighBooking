@@ -39,6 +39,9 @@ public class BookingEntity extends Personal implements Serializable {
 
     private double totalPrice;
 
+    @Transient
+    private String direction;
+
     public BookingEntity() {
     }
 
@@ -108,5 +111,13 @@ public class BookingEntity extends Personal implements Serializable {
     @Override
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }

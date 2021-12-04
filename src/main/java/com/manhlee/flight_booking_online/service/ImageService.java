@@ -13,19 +13,23 @@ public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
 
-    public List<ImageEntity> getImagesAirport(int id){
+    public List<ImageEntity> getImagesAirport(int id) {
         return imageRepository.findByAirport_Id(id);
     }
 
-    public List<ImageEntity> getImagesAircraft(int id){
+    public List<ImageEntity> getImagesAircraft(int id) {
         return imageRepository.findByAircraft_Id(id);
     }
 
-    public List<ImageEntity> getImagesPromotion(int id){
+    public List<ImageEntity> getImagesPromotion(int id) {
         return imageRepository.findByPromotion_Id(id);
     }
 
-    public List<ImageEntity> getImagesService(int id){
+    public List<ImageEntity> getImagesService(int id) {
         return imageRepository.findByService_Id(id);
+    }
+
+    public void delete(int id) {
+        imageRepository.deleteByImageId(id);
     }
 }

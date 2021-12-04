@@ -1,8 +1,11 @@
 package com.manhlee.flight_booking_online.service;
 
+import com.manhlee.flight_booking_online.entities.AirportEntity;
 import com.manhlee.flight_booking_online.entities.FlightEntity;
 import com.manhlee.flight_booking_online.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,4 +44,5 @@ public class FlightService {
     public List<FlightEntity> getFlightsPromotion(){
         return flightRepository.getFlightsPromotionLazy();
     }
+
 }

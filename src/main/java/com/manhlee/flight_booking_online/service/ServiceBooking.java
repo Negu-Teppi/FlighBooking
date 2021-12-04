@@ -17,7 +17,11 @@ public class ServiceBooking {
         return (List<ServiceBookingEntity>) serviceBookingRepository.findAll();
     }
 
-    public List<ServiceBookingEntity> getServiceBookingByBookingDetail(int id){
+    public List<ServiceBookingEntity> getServiceBookingByBookingDetail(int id) {
         return serviceBookingRepository.findByBookingDetail_Id(id);
+    }
+
+    public void delete(int id) {
+        serviceBookingRepository.deleteById(id);
     }
 }

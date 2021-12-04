@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.PathParam;
+import java.text.DecimalFormat;
 import java.util.*;
 
 
@@ -37,6 +39,18 @@ public class AjaxController {
 
     @Autowired
     private MailSender mailSender;
+
+    @Autowired
+    private ServiceBooking serviceBooking;
+
+    @Autowired
+    private Services services;
+
+    @Autowired
+    private BookingDetailService bookingDetailService;
+
+    @Autowired
+    private BookingStatusService bookingStatusService;
 
     @RequestMapping("/getSeats")
     public String getSeats(@RequestParam("aircraftId") int id, Model model){
@@ -71,21 +85,95 @@ public class AjaxController {
         return "manager/ajax/load-flight";
     }
 
+    @RequestMapping("/change-price")
+    @ResponseBody
+    public String priceService(Model model, @RequestParam("serviceId") int serviceId,
+             @RequestParam("quantity") int quantity,
+             @SessionAttribute("serviceBooking") HashMap<Integer, ServiceBookingEntity> serviceBookings) {
+        ServiceEntity service = services.getService(serviceId);
+        if (quantity > 0) {
+            boolean check = true;
+            if (serviceBookings.size() > 0) {
+                for (Map.Entry<Integer, ServiceBookingEntity> entry : serviceBookings.entrySet()) {
+                    if (entry.getKey() == serviceId) {
+                        ServiceBookingEntity serviceBooking = serviceBookings.get(entry.getKey());
+                        serviceBooking.setQuantity(quantity);
+                        serviceBooking.setPrice(service.getPrice());
+                        serviceBookings.put(entry.getKey(), serviceBooking);
+                        check = true;
+                        break;
+                    } else {
+                        check = false;
+                    }
+                }
+                if (check == false) {
+                    ServiceBookingEntity serviceBookingB = new ServiceBookingEntity();
+                    serviceBookingB.setService(service);
+                    serviceBookingB.setQuantity(quantity);
+                    serviceBookingB.setPrice(service.getPrice());
+                    serviceBookings.put(serviceId, serviceBookingB);
+                }
+            } else {
+                ServiceBookingEntity serviceBooking = new ServiceBookingEntity();
+                serviceBooking.setService(service);
+                serviceBooking.setQuantity(quantity);
+                serviceBooking.setPrice(service.getPrice());
+                serviceBookings.put(serviceId, serviceBooking);
+            }
+        } else {
+            serviceBookings.remove(serviceId);
+        }
 
-//    @RequestMapping(value = "/report")
-//    public String report(Model model, @RequestParam("start") String strStartDate,
-//                         @RequestParam("end") String strEndDate,
-//                         RedirectAttributes redirectAttributes) throws ParseException {
-//        List<BookingEntity> bookings= new ArrayList<>();
-//        if (!strEndDate.equals("") && !strStartDate.equals("")) {
-//            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//            Date startDate = formatter.parse(strStartDate);
-//            Date endDate = formatter.parse(strEndDate);
-//            bookings = bookingService.searchByBookingDate(startDate, endDate);
-//        } else {
-//            bookings = bookingService.getBookings();
+        double totalServiceOfBookingDetail = 0;
+        for (Map.Entry<Integer, ServiceBookingEntity> entry : serviceBookings.entrySet()) {
+            totalServiceOfBookingDetail += entry.getValue().getPrice() * entry.getValue().getQuantity();
+        }
+        model.addAttribute("totalServiceOfBookingDetail", totalServiceOfBookingDetail);
+        DecimalFormat formatter = new DecimalFormat("###,###,### VND");
+        String price = formatter.format(totalServiceOfBookingDetail);
+        return price;
+    }
+
+    @RequestMapping("/load-service")
+    public String loadService(Model model, @RequestParam("bookingDetailId") int bookingDetailId,
+                    @RequestParam("bookingId") int bookingId,
+                    @SessionAttribute("serviceBooking") HashMap<Integer, ServiceBookingEntity> serviceBookings){
+
+        Collection<ServiceBookingEntity> values =serviceBookings.values();
+        List<ServiceBookingEntity> serviceBookingss= new ArrayList<ServiceBookingEntity>(values);
+        BookingDetailEntity bookingDetail = bookingDetailService.getBookingDetail(bookingDetailId);
+        for (ServiceBookingEntity serviceBooking:serviceBookingss){
+            serviceBooking.setBookingDetail(bookingDetail);
+        }
+
+        bookingDetail.setServiceBookings(serviceBookingss);
+
+        bookingDetailService.save(bookingDetail);
+
+        List<BookingDetailEntity> bookingDetails = bookingDetailService.getBookingDetailsByBooking(bookingId);
+        model.addAttribute("bookingDetails", bookingDetails);
+        model.addAttribute("services", services.getServices());
+        model.addAttribute("booking", bookingService.getBooking(bookingId));
+        model.addAttribute("direction", bookingDetailService.getDirection(bookingDetails));
+        model.addAttribute("bookingStatus", bookingStatusService.getBookingStatus());
+        return "manager/ajax/load-service";
+
+    }
+
+//    @RequestMapping("/serviceBooking/delete")
+//    public String deleteServiceBooking(Model model, @RequestParam("serviceId") int serviceId,
+//                                       @RequestParam("bookingDetailId") int bookingDetailId,
+//                                       @RequestParam("status") String status){
+//        serviceBooking.delete(serviceId);
+//        List<ServiceBookingEntity> getServices = serviceBooking.getServiceBookingByBookingDetail(bookingDetailId);
+//        Map<Integer, String> serviceBookings = new HashMap<>();
+//        for(ServiceBookingEntity serviceBooking: getServices){
+//            serviceBookings.put(serviceBooking.getId(), serviceBooking.getService().getName());
 //        }
-//        redirectAttributes.addFlashAttribute("bookings", bookings);
-//        return "redirect:/report";
+//        model.addAttribute("services", serviceBookings);
+//        model.addAttribute("bookingDetailId", bookingDetailId);
+//        model.addAttribute("status", status);
+//        return "manager/ajax/load-service-booking-detail";
 //    }
+
 }

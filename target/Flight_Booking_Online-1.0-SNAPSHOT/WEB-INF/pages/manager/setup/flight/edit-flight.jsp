@@ -200,56 +200,32 @@
 <script>
 
     $(document).ready(function(){
-        <%--$("#submit").on('click', function (){--%>
-        <%--    var promotions = $("select#promotion option:checked").val();--%>
-        <%--    var id= $("#id").val();--%>
-        <%--    var aircraft=$("#aircraft").val();--%>
-        <%--    var flightRoute = $("#flightRoute").val();--%>
-        <%--    var departs = $("#departS").val();--%>
-        <%--    var arrivals = $("#arrivalS").val();--%>
-        <%--    var status = $("#status").val();--%>
-        <%--    var operation=$("#operation").val();--%>
-        <%--    var flight= {--%>
-        <%--        id:id,--%>
-        <%--        depart:departs,--%>
-        <%--        arrival:arrivals,--%>
-        <%--        aircraft:aircraft,--%>
-        <%--        flightRoute:flightRoute,--%>
-        <%--        promotions:promotions,--%>
-        <%--        operation:operation,--%>
-        <%--        status:status--%>
-        <%--    };--%>
-        <%--    $.ajax({--%>
-        <%--        type: "POST",--%>
-        <%--        url: '${pageContext.request.contextPath}/api/test',--%>
-        <%--        contentType: 'application/json',--%>
-        <%--        accept: 'application/json',--%>
-        <%--        dataType:'json',--%>
-        <%--        data: JSON.stringify(flight), // Note it is important--%>
-        <%--        success :function(result) {--%>
-        <%--            // do what ever you want with data--%>
-        <%--            alert('ok');--%>
-        <%--        }--%>
-        <%--    });--%>
-        <%--});--%>
-
         $.validator.addMethod("duration", function (value, element){
             return /^([01]?[0-9]|2[0-3])(:[0-5][0-9]){2}$/.test(value);
         }, "Invalid time format.");
         $("#flight").validate({
             errorClass: "my-error-class",
             rules: {
-                duration: {
+                departs: {
                     required: true,
-                    duration: true
+                    date: true
                 },
-                distance: {
+                arrivalS: {
                     required: true,
-                    digits: true
+                    date: true
                 },
-                price: {
-                    required: true,
-                    number: true
+                messages: {
+                    departs: {
+                        required: "Please select depart date.",
+                        date: "Field must type date."
+                    },
+                    arrivalS: {
+                        required: "Please select arrival date.",
+                        date: "Field must type date."
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
                 }
             }
         });

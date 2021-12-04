@@ -31,7 +31,7 @@ public class JPAConfig {
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/flight_booking_online?characterEncoding=UTF-8");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/flight_booking?characterEncoding=UTF-8");
         dataSource.setUsername("root");
         dataSource.setPassword("!sml123A@z");
 

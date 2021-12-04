@@ -5,12 +5,11 @@ import com.manhlee.flight_booking_online.entities.PromotionEntity;
 import com.manhlee.flight_booking_online.enums.PromotionStatusEnum;
 import com.manhlee.flight_booking_online.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -22,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/manager/promotion")
@@ -32,8 +32,11 @@ public class PromotionController {
 
 
     @RequestMapping("/view")
-    public String viewPromotion(Model model){
-        model.addAttribute("promotions", promotionService.getPromotions());
+    public String viewPromotion(Model model,
+                                @RequestParam("page") Optional<Integer> p){
+        Pageable pageable = PageRequest.of(p.orElse(0), 5);
+        model.addAttribute("promotions", promotionService.getPromotionPages(pageable));
+//        model.addAttribute("promotions", promotionService.getPromotions());
         return "manager/manage/promotion/view-promotion";
     }
     @RequestMapping("/add-promotion")

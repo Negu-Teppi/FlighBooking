@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingDetailService {
@@ -21,4 +22,23 @@ public class BookingDetailService {
         return bookingDetailRepository.findByBooking_Id(id);
     }
 
+    public String getDirection(List<BookingDetailEntity> bookingDetails){
+        if(bookingDetails.get(0).getFlight().getId()==bookingDetails.get(bookingDetails.size()-1).getFlight().getId()){
+            return "OneTrip";
+        }else {
+            return "TwoTrip";
+        }
+    }
+
+    public BookingDetailEntity getBookingDetail(int id){
+        Optional<BookingDetailEntity> optional = bookingDetailRepository.findById(id);
+        if(optional.isPresent()){
+            return optional.get();
+        }
+        return null;
+    }
+
+    public void save(BookingDetailEntity bookingDetailEntity){
+        bookingDetailRepository.save(bookingDetailEntity);
+    }
 }

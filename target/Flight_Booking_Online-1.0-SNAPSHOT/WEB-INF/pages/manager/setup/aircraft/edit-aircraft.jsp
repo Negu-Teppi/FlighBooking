@@ -94,20 +94,20 @@
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="number" value="${aircraft.number}" name="number">
+                                            <input class="mdl-textfield__input" type="text" value="${aircraft.number}" name="number">
                                             <label class="mdl-textfield__label">Number</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="number" value="${aircraft.rowNumber}"
+                                            <input class="mdl-textfield__input" type="text" value="${aircraft.rowNumber}"
                                                    name="rowNumber">
                                             <label class="mdl-textfield__label">Row</label>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="text" value="${aircraft.colNumber}"
+                                            <input class="mdl-textfield__input" type="number" value="${aircraft.colNumber}"
                                                    name="colNumber">
                                             <label class="mdl-textfield__label">Column</label>
                                         </div>
@@ -128,7 +128,7 @@
                                             <span class="mdl-textfield__error">Text required!</span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 p-t-20">
+                                    <p class="col-lg-12 p-t-20">
                                         <label class="control-label col-md-3">Upload Room Photos</label>
                                         <br/>
                                         <c:if test="${action == 'update'}">
@@ -136,12 +136,16 @@
                                                 <tr>
                                                     <c:forEach items="${images}" var="image" varStatus="index">
                                                         <td>
-                                                            <div class="image-area">
-                                                                <img
+                                                            <p>
+                                                                <img class="img-edit"
                                                                      src="<c:url value="/resources-management/image/aircraft/"/>${image.name}"/>
                                                                 <br/>
-                                                                <a class="remove-image" href="#" style="display: inline;">&#215;</a>
-                                                            </div>
+                                                                <a onclick="location.href='<c:url
+                                                                        value="/manager/image/delete/${image.id}"/>'"
+                                                                   class="btn btn-tbl-delete btn-xs m-l-40">
+                                                                    <i class="fa fa-trash-o "></i>
+                                                                </a>
+                                                            </p>
                                                         </td>
 
                                                     </c:forEach>
@@ -185,31 +189,29 @@
                     required: true
                 },
                 number: {
-                    required: true,
-                    maxlength: 7
+                    required: true
                 },
                 rowNumber: {
                     required: true,
-                    maxlength: 2
+                    minletter: true
                 },
                 colNumber: {
                     required: true,
-                    minletter: true
+                    maxlength: 2
                 }
             },
             messages: {
                 name: "Please enter aircraft name.",
                 number: {
                    required: "Please enter number aircraft.",
-                   maxlength: "Number aircraft maximum of 5 characters."
                 },
                 rowNumber: {
                     required: "Please enter row number.",
-                    maxlength: "Row number aircraft maximum of 7 characters."
+                    minletter: "Column number aircraft must be at least 1 letter long."
                 },
                 colNumber: {
                     required: "Please enter column number.",
-                    minletter: "Column number aircraft must be at least 1 letter long."
+                    maxlength: "Number aircraft maximum of 2 characters."
                 }
             },
             submitHandler: function(form) {

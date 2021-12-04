@@ -16,5 +16,9 @@ public interface BookingStatusRepository extends CrudRepository<BookingStatusEnt
 
     @Query(nativeQuery = true, value = "SELECT * FROM booking_status\n" +
             "where status=?1")
-    BookingStatusEntity getStatusEquals(String status);
+    List<BookingStatusEntity> getStatusEquals(String status);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM booking_status\n" +
+            "where status=?1" )
+    BookingStatusEntity getStatus(String status);
 }

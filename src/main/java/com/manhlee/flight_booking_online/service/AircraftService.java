@@ -3,6 +3,8 @@ package com.manhlee.flight_booking_online.service;
 import com.manhlee.flight_booking_online.entities.AircraftEntity;
 import com.manhlee.flight_booking_online.repository.AircraftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,5 +34,9 @@ public class AircraftService {
 
     public void deleteAircraft(int id){
         aircraftRepository.deleteById(id);
+    }
+
+    public Page<AircraftEntity> getAircraftPages(Pageable pageable){
+        return aircraftRepository.findAll(pageable);
     }
 }

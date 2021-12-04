@@ -35,37 +35,39 @@
                         </div>
                     </div>
                 </li>
-                <li class="menu-heading">
-                    <span>-- Setup</span>
-                </li>
                 <li class="nav-item start">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">vpn_key</i>
-                        <span class="title">Setup Aircrafts</span>
+                        <i class="material-icons">flight_land</i>
+                        <span class="title">Aircrafts</span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item ">
                             <a href="<c:url value="/manager/view/aircraft"/>" class="nav-link ">
-                                <span class="title">View</span>
+                                <span class="title">View Aircraft</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="<c:url value="/manager/aircraft-seat/add"/> " class="nav-link ">
-                                <span class="title">Set Seat</span>
+                        <li class="nav-item ">
+                            <a href="<c:url value="/manager/view/aircraft"/>" class="nav-link ">
+                                <span class="title">Add Aircraft</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="<c:url value="/manager/aircraft-seat/view"/> " class="nav-link ">
-                                <span class="title">View Seat</span>
-                            </a>
-                        </li>
+<%--                        <li class="nav-item">--%>
+<%--                            <a href="<c:url value="/manager/aircraft-seat/add"/> " class="nav-link ">--%>
+<%--                                <span class="title">Set Seat</span>--%>
+<%--                            </a>--%>
+<%--                        </li>--%>
+<%--                        <li class="nav-item">--%>
+<%--                            <a href="<c:url value="/manager/aircraft-seat/view"/> " class="nav-link ">--%>
+<%--                                <span class="title">View Seat</span>--%>
+<%--                            </a>--%>
+<%--                        </li>--%>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">vpn_key</i>
-                        <span class="title">Setup Airports</span>
+                        <i class="material-icons">account_balance</i>
+                        <span class="title">Airports</span>
                         <span class="arrow"></span>
 <%--                        <span class="label label-rouded label-menu label-danger">new</span>--%>
                     </a>
@@ -77,15 +79,15 @@
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link ">
-                                <span class="title">Edit</span>
+                                <span class="title">Add Airport</span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">vpn_key</i>
-                        <span class="title">Setup Flight Route</span>
+                        <i class="material-icons">flight</i>
+                        <span class="title">Flight Route</span>
                         <span class="arrow"></span>
                         <%--                        <span class="label label-rouded label-menu label-danger">new</span>--%>
                     </a>
@@ -104,60 +106,52 @@
                 </li>
                 <li class="nav-item start">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">vpn_key</i>
-                        <span class="title">Setup Flight</span>
+                        <i class="material-icons">flight_takeoff</i>
+                        <span class="title">Flight</span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item ">
                             <a href="<c:url value="/manager/flight/view"/>" class="nav-link ">
-                                <span class="title">View</span>
+                                <span class="title">View Flight</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<c:url value="/manager/flight/add"/> " class="nav-link ">
-                                <span class="title">Add</span>
+                                <span class="title">Add Flight</span>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="menu-heading m-t-20">
-                    <span>-- Manage</span>
-                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">business_center</i>
-                        <span class="title">Manage Booking</span>
+                        <i class="material-icons">group</i>
+                        <span class="title">Booking</span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item">
                             <a href="<c:url value="/manager/booking/view"/>" class="nav-link ">
-                                <span class="title">View</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="edit_booking.html" class="nav-link ">
-                                <span class="title">Reject</span>
+                                <span class="title">All Bookings</span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">business_center</i>
-                        <span class="title">Manage Service</span>
+                        <i class="material-icons">local_taxi</i>
+                        <span class="title">Service</span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item">
                             <a href="<c:url value="/manager/service/view"/>" class="nav-link ">
-                                <span class="title">View</span>
+                                <span class="title">View Services</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<c:url value="/manager/service/add-service"/>" class="nav-link ">
-                                <span class="title">Add</span>
+                                <span class="title">Add Service</span>
                             </a>
                         </li>
                         </li>
@@ -165,19 +159,19 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-toggle">
-                        <i class="material-icons">business_center</i>
-                        <span class="title">Manage Promotion</span>
+                        <i class="material-icons">event</i>
+                        <span class="title">Promotion</span>
                         <span class="arrow"></span>
                     </a>
                     <ul class="sub-menu">
                         <li class="nav-item">
                             <a href="<c:url value="/manager/promotion/view"/>" class="nav-link ">
-                                <span class="title">View</span>
+                                <span class="title">View Promotions</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<c:url value="/manager/promotion/add-promotion"/>" class="nav-link ">
-                                <span class="title">Add</span>
+                                <span class="title">Add Promotion</span>
                             </a>
                         </li>
                     </ul>

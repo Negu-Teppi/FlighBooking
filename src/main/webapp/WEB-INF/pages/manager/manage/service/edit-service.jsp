@@ -1,13 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="mvc"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Home</title>
     <jsp:include page="/WEB-INF/pages/include/management/css-page.jsp"/>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
     <style>
-
+        .my-error-class {
+            color:#FF0000;  /* red */
+        }
     </style>
 </head>
 <body class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white dark-sidebar-color logo-dark">
@@ -27,7 +32,7 @@
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
                             <c:if test="${action == 'add'}">
-                                <div class="page-title">Update Service</div>
+                                <div class="page-title">Add Service</div>
                             </c:if>
                             <c:if test="${action == 'update'}">
                                 <div class="page-title">Edit Service</div>
@@ -71,7 +76,7 @@
                                 </ul>
                             </div>
                             <mvc:form action="${pageContext.request.contextPath}/manager/service/result"
-                                      modelAttribute="service" method="post" enctype="multipart/form-data">
+                                      modelAttribute="service" method="post" enctype="multipart/form-data" id="service">
                                 <div class="card-body row">
                                     <input name="action" type="text" value="${action}" hidden/>
                                     <c:if test="${action == 'update'}">
@@ -91,7 +96,9 @@
                                     </div>
                                     <div class="col-lg-6 p-t-20">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label txt-full-width">
-                                            <input class="mdl-textfield__input" type="number" value="${service.price}" name="price">
+                                            <fmt:formatNumber type = "number" groupingUsed = "false"
+                                                              maxFractionDigits = "0" value = "${service.price}" var="price" />
+                                            <input class="mdl-textfield__input" type="number" value="${price}" name="price">
                                             <label class="mdl-textfield__label">Price</label>
                                             <span class="mdl-textfield__error">Number or text required!</span>
                                         </div>
@@ -124,5 +131,49 @@
     <!-- end footer -->
 </div>
 <jsp:include page="/WEB-INF/pages/include/management/js-page.jsp" />
+<script>
+    $(document).ready(function(){
+        $.validator.addMethod("duration", function (value, element){
+            return /^([01]?[0-9]|2[0-3])(:[0-5][0-9]){2}$/.test(value);
+        }, "Invalid time format.");
+        $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return arg !== value;
+        }, "Value must not equal arg.");
+        $.validator.addMethod('minStrict', function (value, el, param) {
+            return value > param;
+        });
+        $("#service").validate({
+            errorClass: "my-error-class",
+            rules: {
+                name: {
+                    required: true
+                },
+                price: {
+                    required: true,
+                    minStrict: 0,
+                    digits: true,
+                },
+                description: {
+                    required: true,
+                    maxlength: 100
+                }
+            },
+            messages: {
+                name: "Please enter service name.",
+                price: {
+                    required: "Please enter price.",
+                    minStrict: "Field must greater than 0"
+                },
+                description: {
+                    required: "Please enter description.",
+                    maxlength: "Can only enter up to 100 characters!"
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+</script>
 </body>
 </html>

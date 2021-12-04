@@ -24,14 +24,14 @@
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">All Promotion</div>
+                            <div class="page-title">All Service</div>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
                             <li><i class="fa fa-home"></i>&nbsp;<a class="parent-item" href="index.html">Home</a>&nbsp;<i class="fa fa-angle-right"></i>
                             </li>
-                            <li><a class="parent-item" href="">Promotion</a>&nbsp;<i class="fa fa-angle-right"></i>
+                            <li><a class="parent-item" href="">Service</a>&nbsp;<i class="fa fa-angle-right"></i>
                             </li>
-                            <li class="active">All Promotion</li>
+                            <li class="active">All Service</li>
                         </ol>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     <div class="col-md-12">
                         <div class="card card-box">
                             <div class="card-head">
-                                <header>All Promotion</header>
+                                <header>All Service</header>
                                 <div class="tools">
                                     <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
                                     <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -55,27 +55,6 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-6 col-6">
-                                        <div class="btn-group pull-right">
-                                            <a class="btn deepPink-bgcolor  btn-outline dropdown-toggle" data-toggle="dropdown">Tools
-                                                <i class="fa fa-angle-down"></i>
-                                            </a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li>
-                                                    <a href="javascript:;">
-                                                        <i class="fa fa-print"></i> Print </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;">
-                                                        <i class="fa fa-file-pdf-o"></i> Save as PDF </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:;">
-                                                        <i class="fa fa-file-excel-o"></i> Export to Excel </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="table-scrollable">
                                     <table class="table table-hover table-checkable order-column full-width" id="example4">
@@ -88,13 +67,13 @@
                                             <th class="center"> Action </th>
                                         </tr>
                                         </thead>
-                                        <c:forEach items="${services}" var="service">
+                                        <c:forEach items="${services.content}" var="service">
                                             <c:set var="price" value="${service.price}"/>
                                             <tbody>
                                             <tr class="odd gradeX">
                                                 <td class="user-circle-img">
                                                     <c:forEach items="${service.images}" var="image">
-                                                        <img width="100px" height="100px"
+                                                        <img class="img-w-100-h-75"
                                                              src="<c:url value="/resources-management/image/service/"/>${image.name}"/>
                                                     </c:forEach>
                                                 </td>
@@ -102,7 +81,7 @@
                                                 <td class="center">${service.description}</td>
                                                 <td class="center">
                                                     <fmt:formatNumber type = "number"
-                                                                      maxFractionDigits = "0" value = "${price}" />
+                                                                      maxFractionDigits = "0" value = "${price}" /> VND
                                                 </td>
                                                 <td class="center">
                                                     <a href="<c:url
@@ -115,6 +94,16 @@
                                             </tbody>
                                         </c:forEach>
                                     </table>
+                                </div>
+                                <div class="row p-b-20">
+                                    <nav aria-label="Page navigation example" style="text-align: center">
+                                        <ul class="pagination">
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/service/view?page=0">First</a></li>
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/service/view?page=${services.number - 1}">Previous</a></li>
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/service/view?page=${services.number + 1}">Next</a></li>
+                                            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/manager/service/view?page=${services.totalPages - 1}">Last</a></li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>

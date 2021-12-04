@@ -21,7 +21,11 @@ public class BookingStatusService {
         return statusRepository.getStatusNot(status);
     }
 
-    public BookingStatusEntity getStatus(String status){
+    public List<BookingStatusEntity> getStatus(String status){
         return statusRepository.getStatusEquals(status);
+    }
+
+    public BookingStatusEntity getStatusEquals(String status){
+        return statusRepository.getStatus(status);
     }
 }

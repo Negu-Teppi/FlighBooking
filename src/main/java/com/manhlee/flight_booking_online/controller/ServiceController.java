@@ -4,12 +4,11 @@ import com.manhlee.flight_booking_online.entities.ImageEntity;
 import com.manhlee.flight_booking_online.entities.ServiceEntity;
 import com.manhlee.flight_booking_online.service.Services;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -20,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/manager/service")
@@ -29,8 +29,11 @@ public class ServiceController {
     private Services services;
 
     @RequestMapping("/view")
-    public String viewService(Model model){
-        model.addAttribute("services", services.getServices());
+    public String viewService(Model model,
+                              @RequestParam("page") Optional<Integer> p){
+        Pageable pageable = PageRequest.of(p.orElse(0), 5);
+        model.addAttribute("services", services.getServicePages(pageable));
+//        model.addAttribute("services", services.getServices());
         return "manager/manage/service/view-service";
     }
     @RequestMapping("/add-service")
