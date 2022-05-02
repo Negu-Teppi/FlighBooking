@@ -1,16 +1,16 @@
 package com.manhlee.flight_booking_online.controller;
 
 import com.manhlee.flight_booking_online.entities.*;
-import com.manhlee.flight_booking_online.enums.BookingStatus;
 import com.manhlee.flight_booking_online.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import javax.ws.rs.PathParam;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -32,18 +32,6 @@ public class AjaxController {
     private BookingService bookingService;
 
     @Autowired
-    private CreditCardService cardService;
-
-    @Autowired
-    private PaymentService paymentService;
-
-    @Autowired
-    private MailSender mailSender;
-
-    @Autowired
-    private ServiceBooking serviceBooking;
-
-    @Autowired
     private Services services;
 
     @Autowired
@@ -53,10 +41,10 @@ public class AjaxController {
     private BookingStatusService bookingStatusService;
 
     @RequestMapping("/getSeats")
-    public String getSeats(@RequestParam("aircraftId") int id, Model model){
-        List<SeatEntity> getSeats =  seatService.getSeats(id);
+    public String getSeats(@RequestParam("aircraftId") int id, Model model) {
+        List<SeatEntity> getSeats = seatService.getSeats(id);
         Map<Integer, String> seats = new HashMap<>();
-        for (SeatEntity seat: getSeats) {
+        for (SeatEntity seat : getSeats) {
             seats.put(seat.getId(), seat.getSeatNumber());
         }
         model.addAttribute("seats", seats);
@@ -64,10 +52,10 @@ public class AjaxController {
     }
 
     @RequestMapping("/getDestination")
-    public String getDestination(@RequestParam("departureId") int id, Model model){
+    public String getDestination(@RequestParam("departureId") int id, Model model) {
         List<AirportEntity> getDestinations = airportService.getDestination(id);
         Map<Integer, String> destinations = new HashMap<>();
-        for (AirportEntity airport: getDestinations){
+        for (AirportEntity airport : getDestinations) {
             destinations.put(airport.getId(), airport.getCity().getCityName());
         }
         model.addAttribute("destinations", destinations);
@@ -75,10 +63,10 @@ public class AjaxController {
     }
 
     @RequestMapping("/getFlights")
-    public String getFlights(@RequestParam("aircraftId") int id, Model model){
-        List<FlightEntity> getFlights =  flightService.getFlightByAircraftId(id);
+    public String getFlights(@RequestParam("aircraftId") int id, Model model) {
+        List<FlightEntity> getFlights = flightService.getFlightByAircraftId(id);
         Map<Integer, FlightRouteEntity> flights = new HashMap<>();
-        for (FlightEntity flight: getFlights){
+        for (FlightEntity flight : getFlights) {
             flights.put(flight.getId(), flight.getFlightRoute());
         }
         model.addAttribute("flights", flights);
@@ -88,8 +76,8 @@ public class AjaxController {
     @RequestMapping("/change-price")
     @ResponseBody
     public String priceService(Model model, @RequestParam("serviceId") int serviceId,
-             @RequestParam("quantity") int quantity,
-             @SessionAttribute("serviceBooking") HashMap<Integer, ServiceBookingEntity> serviceBookings) {
+                               @RequestParam("quantity") int quantity,
+                               @SessionAttribute("serviceBooking") HashMap<Integer, ServiceBookingEntity> serviceBookings) {
         ServiceEntity service = services.getService(serviceId);
         if (quantity > 0) {
             boolean check = true;
@@ -106,7 +94,7 @@ public class AjaxController {
                         check = false;
                     }
                 }
-                if (check == false) {
+                if (!check) {
                     ServiceBookingEntity serviceBookingB = new ServiceBookingEntity();
                     serviceBookingB.setService(service);
                     serviceBookingB.setQuantity(quantity);
@@ -136,13 +124,12 @@ public class AjaxController {
 
     @RequestMapping("/load-service")
     public String loadService(Model model, @RequestParam("bookingDetailId") int bookingDetailId,
-                    @RequestParam("bookingId") int bookingId,
-                    @SessionAttribute("serviceBooking") HashMap<Integer, ServiceBookingEntity> serviceBookings){
-
-        Collection<ServiceBookingEntity> values =serviceBookings.values();
-        List<ServiceBookingEntity> serviceBookingss= new ArrayList<ServiceBookingEntity>(values);
+                              @RequestParam("bookingId") int bookingId,
+                              @SessionAttribute("serviceBooking") HashMap<Integer, ServiceBookingEntity> serviceBookings) {
+        Collection<ServiceBookingEntity> values = serviceBookings.values();
+        List<ServiceBookingEntity> serviceBookingss = new ArrayList<ServiceBookingEntity>(values);
         BookingDetailEntity bookingDetail = bookingDetailService.getBookingDetail(bookingDetailId);
-        for (ServiceBookingEntity serviceBooking:serviceBookingss){
+        for (ServiceBookingEntity serviceBooking : serviceBookingss) {
             serviceBooking.setBookingDetail(bookingDetail);
         }
 
@@ -159,21 +146,4 @@ public class AjaxController {
         return "manager/ajax/load-service";
 
     }
-
-//    @RequestMapping("/serviceBooking/delete")
-//    public String deleteServiceBooking(Model model, @RequestParam("serviceId") int serviceId,
-//                                       @RequestParam("bookingDetailId") int bookingDetailId,
-//                                       @RequestParam("status") String status){
-//        serviceBooking.delete(serviceId);
-//        List<ServiceBookingEntity> getServices = serviceBooking.getServiceBookingByBookingDetail(bookingDetailId);
-//        Map<Integer, String> serviceBookings = new HashMap<>();
-//        for(ServiceBookingEntity serviceBooking: getServices){
-//            serviceBookings.put(serviceBooking.getId(), serviceBooking.getService().getName());
-//        }
-//        model.addAttribute("services", serviceBookings);
-//        model.addAttribute("bookingDetailId", bookingDetailId);
-//        model.addAttribute("status", status);
-//        return "manager/ajax/load-service-booking-detail";
-//    }
-
 }

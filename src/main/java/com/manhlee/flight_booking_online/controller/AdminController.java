@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
+    @SuppressWarnings({"checkstyle:DesignForExtension", "checkstyle:MissingJavadocMethod", "checkstyle:FinalParameters", "checkstyle:LineLength"})
     @RequestMapping("/home")
     public String viewHome(Model model) {
 
